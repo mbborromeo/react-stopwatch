@@ -1,3 +1,7 @@
+The files I edited for the test are:
+- src/index.js
+- public/index.html
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
