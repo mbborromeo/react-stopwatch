@@ -46,15 +46,14 @@ class Stopwatch extends Component<StopwatchProps, any> {
       });
   }
 
-  //this records running time, but the new lap is supposed to be difference between it and the last lap.
+  //running clock time subtracted by total previous lap seconds equals current lap time
   handleLapClick() {
-    let currentLapsElasped = 0;
+    let previousLapSecondsTotal = 0;
     for (let i = 0; i < this.laps.length; i++) {
-      currentLapsElasped += this.laps[i]; //currentLapsElasped = this.laps[i];
+      previousLapSecondsTotal += this.laps[i];
     }
     
-    this.laps = this.laps.concat([this.state.secondsElapsed - currentLapsElasped]);
-    //this.laps = this.laps.concat([this.state.secondsElapsed]);
+    this.laps = this.laps.concat([this.state.secondsElapsed - previousLapSecondsTotal]);//this.state.secondsElapsed
     this.forceUpdate();
   }
 
