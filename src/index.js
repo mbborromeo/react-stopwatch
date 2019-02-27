@@ -48,8 +48,14 @@ class Stopwatch extends Component<StopwatchProps, any> {
 
   //this records running time, but the new lap is supposed to be difference between it and the last lap.
   handleLapClick() {
-    //this.laps = this.laps.concat([this.state.secondsElapsed - currentLapsElasped]);
-    this.laps = this.laps.concat([this.state.secondsElapsed]);
+    //const currentLapsElasped = this.laps.reduce( (a: number, b: number) => a + b, 0 ); affects Delete.
+    let currentLapsElasped = 0;
+    for (let i = 0; i < this.laps.length; i++) {
+      currentLapsElasped += this.laps[i]; //currentLapsElasped = this.laps[i];
+    }
+    
+    this.laps = this.laps.concat([this.state.secondsElapsed - currentLapsElasped]);
+    //this.laps = this.laps.concat([this.state.secondsElapsed]);
     this.forceUpdate();
   }
 
