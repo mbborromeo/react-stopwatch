@@ -12,15 +12,16 @@ interface StopwatchProps extends ClassAttributes<Stopwatch> {
 //class definition
 class Stopwatch extends Component<StopwatchProps, any> {
   incrementer: any
-  laps: any[] //array of lap times in seconds
+  //laps: any[] //array of lap times in seconds
 
   constructor(props: StopwatchProps) {
     super(props);
     this.state = {
       secondsElapsed: props.initialSeconds,
       lastClearedIncrementer: null,
+      laps: [],
     }
-    this.laps = [];
+    //this.laps = [];
   }
 
   /* click handlers ********************************/
@@ -30,7 +31,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
       () => this.setState({ secondsElapsed: this.state.secondsElapsed + 1, }), 1000
     );
   }
-
+2
   handleStopClick() {
     clearInterval(this.incrementer);
     this.setState({
@@ -40,25 +41,36 @@ class Stopwatch extends Component<StopwatchProps, any> {
 
   handleResetClick() {
     clearInterval(this.incrementer);
-    this.laps = [];//error expected an assignment or function call, instead saw expression no-unused-expression. Missing semi-colon.
+    //this.laps = [];//error expected an assignment or function call, instead saw expression no-unused-expression. Missing semi-colon.
       this.setState({
         secondsElapsed: 0,
+        laps: [],
       });
   }
 
   //running clock time subtracted by total previous lap seconds equals current lap time
   handleLapClick() {
     let previousLapSecondsTotal = 0;
-    for (let i = 0; i < this.laps.length; i++) {
-      previousLapSecondsTotal += this.laps[i];
+    for (let i = 0; i < this.state.laps.length; i++) {
+      previousLapSecondsTotal += this.state.laps[i];
     }
     
-    this.laps = this.laps.concat([this.state.secondsElapsed - previousLapSecondsTotal]);//this.state.secondsElapsed
-    this.forceUpdate();
+    //this.laps = this.laps.concat([this.state.secondsElapsed - previousLapSecondsTotal]);//this.state.secondsElapsed
+    this.setState({
+      laps: this.state.laps.concat([this.state.secondsElapsed - previousLapSecondsTotal]),
+    });
+    //this.forceUpdate();
   }
 
   handleDeleteClick(index: number) {
-    return () => this.laps.splice(index, 1);
+    //return () => this.state.laps.splice(index, 1);
+    //make a copy of this.state.laps before removing element
+    const newLaps = [...this.state.laps];
+    newLaps.splice(index, 1);
+
+    return () => this.setState({
+      laps: newLaps,
+    });
   }
   /* end of click handlers ********************************/
 
@@ -99,7 +111,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
         }
 
         <div className="stopwatch-laps">
-          { this.laps && this.laps.map(
+          { this.state.laps && this.state.laps.map(
             (lap, i) => <Lap key={i} index={i+1} lap={lap} onDelete={this.handleDeleteClick(i)} />
           )
           }
