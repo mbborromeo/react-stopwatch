@@ -15,7 +15,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
     super(props);
     this.state = {
       secondsElapsed: props.initialSeconds,
-      lastClearedIncrementer: null,
+      lastClearedIncrementer: undefined,
       laps: [],
     }
   }
@@ -100,8 +100,8 @@ class Stopwatch extends Component<StopwatchProps, any> {
 
         <div className="stopwatch-laps">
           { this.state.laps && this.state.laps.map(
-            (lap, i) => <Lap key={i} index={i+1} lap={lap} onDelete={this.handleDeleteClick(i)} />
-          )
+              (lap, i) => <Lap key={i} index={i+1} lap={lap} onDelete={this.handleDeleteClick(i)} />
+            )
           }
         </div>
       </div>
@@ -111,7 +111,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
 
 }
 
-const Lap = (props: { index: number, lap: number, onDelete: () => {} }) => (
+const Lap = (props: { index: number, lap: number, onDelete: () => void }) => (
   <div key={props.index} className="stopwatch-lap">
     <strong>{props.index}</strong>/ {formattedSeconds(props.lap)}
     <button onClick={props.onDelete} > X </button>
