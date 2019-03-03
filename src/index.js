@@ -2,17 +2,14 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Component, ClassAttributes } from "react";
 
-//function declarations
 const formattedSeconds = (sec: number) => Math.floor(sec / 60) + ':' + ('0' + sec % 60).slice(-2);
 
 interface StopwatchProps extends ClassAttributes<Stopwatch> {
   initialSeconds: number;
 }
 
-//class definition
 class Stopwatch extends Component<StopwatchProps, any> {
   incrementer: any
-  //laps: any[] //array of lap times in seconds
 
   constructor(props: StopwatchProps) {
     super(props);
@@ -21,17 +18,14 @@ class Stopwatch extends Component<StopwatchProps, any> {
       lastClearedIncrementer: null,
       laps: [],
     }
-    //this.laps = [];
   }
 
-  /* click handlers ********************************/
   handleStartClick() {
-    //error: incrementer of undefined. this needs to be binded.
     this.incrementer = setInterval(
       () => this.setState({ secondsElapsed: this.state.secondsElapsed + 1, }), 1000
     );
   }
-2
+
   handleStopClick() {
     clearInterval(this.incrementer);
     this.setState({
@@ -41,29 +35,25 @@ class Stopwatch extends Component<StopwatchProps, any> {
 
   handleResetClick() {
     clearInterval(this.incrementer);
-    //this.laps = [];//error expected an assignment or function call, instead saw expression no-unused-expression. Missing semi-colon.
-      this.setState({
-        secondsElapsed: 0,
-        laps: [],
-      });
+    this.setState({
+      secondsElapsed: 0,
+      laps: [],
+    });
   }
 
-  //running clock time subtracted by total previous lap seconds equals current lap time
   handleLapClick() {
+    //running clock time subtracted by total previous lap seconds equals current lap time
     let previousLapSecondsTotal = 0;
     for (let i = 0; i < this.state.laps.length; i++) {
       previousLapSecondsTotal += this.state.laps[i];
     }
     
-    //this.laps = this.laps.concat([this.state.secondsElapsed - previousLapSecondsTotal]);//this.state.secondsElapsed
     this.setState({
       laps: this.state.laps.concat([this.state.secondsElapsed - previousLapSecondsTotal]),
     });
-    //this.forceUpdate();
   }
 
   handleDeleteClick(index: number) {
-    //return () => this.state.laps.splice(index, 1);
     //make a copy of this.state.laps before removing element
     const newLaps = [...this.state.laps];
     newLaps.splice(index, 1);
@@ -72,9 +62,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
       laps: newLaps,
     });
   }
-  /* end of click handlers ********************************/
 
-  //renderer for HTML
   render() {
     const {
       secondsElapsed,
@@ -117,14 +105,12 @@ class Stopwatch extends Component<StopwatchProps, any> {
           }
         </div>
       </div>
-    );//end return
+    );
 
-  }//end renderer
+  }
 
-}//end class definition
+}
 
-
-//HTML component builder
 const Lap = (props: { index: number, lap: number, onDelete: () => {} }) => (
   <div key={props.index} className="stopwatch-lap">
     <strong>{props.index}</strong>/ {formattedSeconds(props.lap)}
@@ -132,7 +118,6 @@ const Lap = (props: { index: number, lap: number, onDelete: () => {} }) => (
   </div>
 );
 
-//app starts here
 ReactDOM.render(
   <Stopwatch initialSeconds={0} />,
   document.getElementById("content"),
