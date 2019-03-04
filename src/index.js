@@ -9,15 +9,16 @@ interface StopwatchProps extends ClassAttributes<Stopwatch> {
 }
 
 class Stopwatch extends Component<StopwatchProps, any> {
-  incrementer: any
-
+  //incrementer: any;
+  
   constructor(props: StopwatchProps) {
     super(props);
     this.state = {
       secondsElapsed: props.initialSeconds,
       lastClearedIncrementer: undefined,
       laps: [],
-      stopwatchRunning: false, 
+      stopwatchRunning: false,
+      incrementer: 0,
     }
   }
 
@@ -28,25 +29,29 @@ class Stopwatch extends Component<StopwatchProps, any> {
     if(this.state.stopwatchRunning === false) {
       this.setState({
         stopwatchRunning: true,      
+        incrementer: setInterval(
+          () => this.setState({ secondsElapsed: this.state.secondsElapsed + 1, }), 
+          1000
+        ),
       });
 
-      this.incrementer = setInterval(
-        () => this.setState({ secondsElapsed: this.state.secondsElapsed + 1, }), 
-        1000
-      );
+      // this.incrementer = setInterval(
+      //   () => this.setState({ secondsElapsed: this.state.secondsElapsed + 1, }), 
+      //   1000
+      // );
     }    
   }
 
   handleStopClick() {
-    clearInterval(this.incrementer);
+    clearInterval(this.state.incrementer);
     this.setState({
-      lastClearedIncrementer: this.incrementer,
+      lastClearedIncrementer: this.state.incrementer,
       stopwatchRunning: false,
     });
   }
 
   handleResetClick() {
-    clearInterval(this.incrementer);
+    clearInterval(this.state.incrementer);
     this.setState({
       secondsElapsed: 0,
       laps: [],
@@ -87,7 +92,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
         <h1 className="stopwatch-timer">{formattedSeconds(secondsElapsed)}</h1>
 
         {
-          (secondsElapsed === 0 || this.incrementer === lastClearedIncrementer
+          (secondsElapsed === 0 || this.state.incrementer === lastClearedIncrementer
               ? <button type="button" className="start-btn"
                         onClick={this.handleStartClick.bind(this)}>start
               </button>
@@ -98,14 +103,14 @@ class Stopwatch extends Component<StopwatchProps, any> {
         }
 
         {
-          (secondsElapsed !== 0 && this.incrementer !== lastClearedIncrementer
+          (secondsElapsed !== 0 && this.state.incrementer !== lastClearedIncrementer
               ? <button type="button" onClick={this.handleLapClick.bind(this)}>lap</button>
               : null
           )
         }
 
         {
-          (secondsElapsed !== 0 && this.incrementer === lastClearedIncrementer
+          (secondsElapsed !== 0 && this.state.incrementer === lastClearedIncrementer
               ? <button type="button" onClick={this.handleResetClick.bind(this)}>reset</button>
               : null
           )
