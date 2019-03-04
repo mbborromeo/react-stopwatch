@@ -21,9 +21,9 @@ class Stopwatch extends Component<StopwatchProps, any> {
     }
   }
 
-  //bug: if this is clicked multiple times before the second it changes to "stop" button, the clock fast forwards
-  //maybe need to change the button to "stop" instantly,
-  //and put a flag on it that the stopwatch is "on" or "off".
+  //if this is clicked multiple times before the second it changes to "stop" button, the clock fast forwards.
+  //so need to check if stopwatch is already running before doing setInterval,
+  //and maybe need to change the button to "stop" instantly instead of a second later.
   handleStartClick() {
     if(this.state.stopwatchRunning === false) {
       this.setState({
