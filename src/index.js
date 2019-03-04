@@ -17,19 +17,31 @@ class Stopwatch extends Component<StopwatchProps, any> {
       secondsElapsed: props.initialSeconds,
       lastClearedIncrementer: undefined,
       laps: [],
+      stopwatchRunning: false, 
     }
   }
 
+  //bug: if this is clicked multiple times before the second it changes to "stop" button, the clock fast forwards
+  //maybe need to change the button to "stop" instantly,
+  //and put a flag on it that the stopwatch is "on" or "off".
   handleStartClick() {
-    this.incrementer = setInterval(
-      () => this.setState({ secondsElapsed: this.state.secondsElapsed + 1, }), 1000
-    );
+    if(this.state.stopwatchRunning === false) {
+      this.setState({
+        stopwatchRunning: true,      
+      });
+
+      this.incrementer = setInterval(
+        () => this.setState({ secondsElapsed: this.state.secondsElapsed + 1, }), 
+        1000
+      );
+    }    
   }
 
   handleStopClick() {
     clearInterval(this.incrementer);
     this.setState({
       lastClearedIncrementer: this.incrementer,
+      stopwatchRunning: false,
     });
   }
 
@@ -38,6 +50,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
     this.setState({
       secondsElapsed: 0,
       laps: [],
+      stopwatchRunning: false,
     });
   }
 
