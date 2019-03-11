@@ -9,8 +9,6 @@ interface StopwatchProps extends ClassAttributes<Stopwatch> {
 }
 
 class Stopwatch extends Component<StopwatchProps, any> {
-  //incrementer: any;
-  
   constructor(props: StopwatchProps) {
     super(props);
     this.state = {
@@ -18,13 +16,12 @@ class Stopwatch extends Component<StopwatchProps, any> {
       lastClearedIncrementer: undefined,
       laps: [],
       stopwatchRunning: false,
-      incrementer: 0,
+      incrementer: 0, //included incrementer within State, so that the "start" button will change to "stop" immediately if "start" is clicked.
     }
   }
 
   //if this is clicked multiple times before the second it changes to "stop" button, the clock fast forwards.
-  //so need to check if stopwatch is already running before doing setInterval,
-  //and maybe need to change the button to "stop" instantly instead of a second later.
+  //so need to check if stopwatch is already running before doing setInterval.
   handleStartClick() {
     if(this.state.stopwatchRunning === false) {
       this.setState({
@@ -81,10 +78,12 @@ class Stopwatch extends Component<StopwatchProps, any> {
     });
   }
 
-  render() {
+  //change the "start" button to "stop" instantly instead of a second later, by checking stopwatchRunning value
+  render() {   
     const {
       secondsElapsed,
       lastClearedIncrementer,
+      stopwatchRunning,
     } = this.state;
 
     return (
@@ -92,7 +91,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
         <h1 className="stopwatch-timer">{formattedSeconds(secondsElapsed)}</h1>
 
         {
-          (secondsElapsed === 0 || this.state.incrementer === lastClearedIncrementer
+          ( (secondsElapsed === 0 && stopwatchRunning === false) || this.state.incrementer === lastClearedIncrementer
               ? <button type="button" className="start-btn"
                         onClick={this.handleStartClick.bind(this)}>start
               </button>
